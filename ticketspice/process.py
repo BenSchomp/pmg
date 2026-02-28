@@ -33,16 +33,20 @@ def export_unique_emails(output_path):
     "Billing Phone Number": "Phone Number",
     "Billing Address (Postal Code)": "Zip Code"
   }
+  # TODO make this dynamic ... "Concert Attendee", VENUE_CITY_STATE, YEAR_OF_SHOW, DATE_OF_SHOW, ARTIST_NAME
+  tags = "Concert Attendee, Silk Factory Newburgh NY, 2026, 2026-02-27, Back in Black"
 
   for ticket in ticket_data.values():
     email = ticket.get("Billing Email Address")
     if email and email not in unique_customers:
       unique_customers[email] = {mapping[k]: ticket.get(k, "") for k in mapping}
+      unique_customers[email]['Tags'] = tags
 
   if not unique_customers:
     return
 
   fieldnames = list(mapping.values())
+  fieldnames.append( "Tags" )
   with open(output_path, mode='w', encoding='utf-8', newline='') as f:
     writer = csv.DictWriter(f, fieldnames=fieldnames)
     writer.writeheader()
@@ -105,8 +109,19 @@ def print_ticket_summary():
 
 if __name__ == "__main__":
   # Replace 'data.csv' with the actual path to your file
-  input_file = 'data.csv'
-  output_file = 'unique_email_export.csv'
+  input_file = 'data.csv' # TODO take from args
+  output_file = 'unique_email_export.csv' # TODO create dynamic name
+
+  # TODO receive tags from args?
+  # usage: python3 process.py tickets.csv "Concert Attendee, Silk Factory Newburgh NY, Back in Black, 2026, 2026-02-27"
+
+  # better usage: python3 process-tickets.csv
+  # > Input file: "tickets (92).csv" (Y)? [most recent local .csv in listing]
+  # > Tag users with: "Concert Attendee" (Y)? [default param]
+  # > Tag users with: "Silk Factory Newburgh NY" (Y)? [default param]
+  # > Tag users with: "2026" (Y)?
+  # > Tag users with: "2026-02-28" (Y)? 2026-02-027 [yesterday's date]
+  # > Tag users with: "Back in Black" (Y)? [Page Name up-to first , or -]
   
   import_data(input_file)
   
