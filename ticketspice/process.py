@@ -4,11 +4,11 @@ from datetime import datetime
 # Global dictionary to store ticket data
 ticket_data = {}
 VENUE_CITY_STATE = "Silk Factory Newburgh NY" # XXX
-YEAR_OF_SHOW = DATE_OF_SHOW = ARTIST_NAME = PAGE_NAME = None
+SHOW_YEAR = SHOW_DATE = ARTIST_NAME = PAGE_NAME = None
 
 def import_data(file_path):
   global ticket_data
-  global VENUE_CITY_STATE, YEAR_OF_SHOW, DATE_OF_SHOW, ARTIST_NAME, PAGE_NAME
+  global VENUE_CITY_STATE, SHOW_YEAR, SHOW_DATE, ARTIST_NAME, PAGE_NAME
 
   try:
     with open(file_path, mode='r', encoding='utf-8-sig') as csvfile:
@@ -25,17 +25,19 @@ def import_data(file_path):
             if PAGE_NAME and not ARTIST_NAME:
               parts = re.split(r'[-|,]', PAGE_NAME, maxsplit=1)
               ARTIST_NAME = parts[0].strip()
-          if not DATE_OF_SHOW:
+          if not SHOW_DATE:
             scan_date = row.get("First Scan Date")
             if scan_date:
-              show_date = datetime.strptime(scan_date, "%Y-%m-%d %I:%M %p")
-              YEAR_OF_SHOW = show_date.strftime("%Y")        # "2025"
-              DATE_OF_SHOW = show_date.strftime("%Y-%m-%d")  # "2025-01-04"
+              dt_obj = datetime.strptime(scan_date, "%Y-%m-%d %I:%M %p")
+              SHOW_YEAR = dt_obj.strftime("%Y")        # "2025"
+              SHOW_DATE = dt_obj.strftime("%Y-%m-%d")  # "2025-01-04"
 
   except FileNotFoundError:
     print(f"Error: The file '{file_path}' was not found.")
   except Exception as e:
     print(f"An error occurred: {e}")
+  else:
+    print( "+ imported:", file_path )
 
 def export_unique_emails(output_path):
   # Use a dictionary keyed by email to ensure uniqueness
@@ -49,7 +51,29 @@ def export_unique_emails(output_path):
     "Billing Phone Number": "Phone Number",
     "Billing Address (Postal Code)": "Zip Code"
   }
-  tags = ', '.join( ["Concert Attendee", VENUE_CITY_STATE, YEAR_OF_SHOW, DATE_OF_SHOW, ARTIST_NAME] )
+
+  bad_tags = False
+  if not VENUE_CITY_STATE:
+    print( "+ missing: VENUE_CITY_STATE" )
+    bad_tags = True
+  if not ARTIST_NAME:
+    print( "+ missing: ARTIST_NAME" )
+    bad_tags = True
+  if not SHOW_DATE:
+    print( "+ missing: SHOW_DATE" )
+    bad_tags = True
+  if not SHOW_YEAR:
+    print( "+ missing: SHOW_YEAR" )
+    bad_tags = True
+
+  if bad_tags:
+    print( "! email export failure - check input file, or use args to supliment data" )
+    return
+
+  tags = ', '.join( ["Concert Attendee", VENUE_CITY_STATE, SHOW_YEAR, SHOW_DATE, ARTIST_NAME] )
+
+  if not output_path:
+    output_path = ARTIST_NAME.replace(" ","") + "_" + VENUE_CITY_STATE.replace(" ","") + "_" + SHOW_DATE + "_Contacts.csv"
 
   for ticket in ticket_data.values():
     email = ticket.get("Billing Email Address")
@@ -68,10 +92,13 @@ def export_unique_emails(output_path):
     for customer in unique_customers.values():
       writer.writerow(customer)
 
+  print( "+ exported:", output_path )
+
 def print_ticket_summary():
   """
   Calculates and prints a summary of counts and subtotals grouped by price.
   """
+  print( '\n>>', ARTIST_NAME, '@', VENUE_CITY_STATE, "~", SHOW_DATE, '<<' )
   print()
   print(f"{'Source':<10} | {'Ticket Price':<20} | {'Count':<10} | {'Amount'}")
 
@@ -122,28 +149,34 @@ def print_ticket_summary():
     grand_amount += total_amount
 
   print("-" * 60)
-  print("-" * 60)
   print(f"{'GRAND TOTAL':<33} | {grand_count:<10} | ${grand_amount:,.2f}")
+  print("-" * 60)
 
 if __name__ == "__main__":
-  # Replace 'data.csv' with the actual path to your file
-  input_file = 'data.csv' # TODO take from args
-  output_file = 'unique_email_export.csv' # TODO create dynamic name
+  parser = argparse.ArgumentParser()
+  parser.add_argument("in_file", help="The exported ticketspice csv file to be imported.")
+  parser.add_argument("--out_file", help="The filename of the mailchimp contacts csv to be written.")
+  parser.add_argument("--artist", help='The artist name (a TAG: "Back in Black")')
+  parser.add_argument("--venue", help='The venue name, city, and state (a TAG: "Silk Factory Newburgh NY")')
+  parser.add_argument("--date", help="The show date (a TAG: 2026-02-27)")
 
-  # TODO receive tags from args?
-  # usage: python3 process.py tickets.csv "Concert Attendee, Silk Factory Newburgh NY, Back in Black, 2026, 2026-02-27"
+  args = parser.parse_args()
+  if args.artist:
+    ARTIST_NAME = args.artist
+  if args.date:
+    dt_obj = datetime.strptime(args.date, "%Y-%m-%d")
+    SHOW_YEAR = dt_obj.strftime("%Y")        # "2025"
+    SHOW_DATE = dt_obj.strftime("%Y-%m-%d")  # "2025-01-04"
+  if args.venue:
+    VENUE_CITY_STATE = args.venue
 
-  # better usage: python3 process-tickets.csv
-  # > Input file: "tickets (92).csv" (Y)? [most recent local .csv in listing]
-  # > Tag users with: "Concert Attendee" (Y)? [default param]
-  # > Tag users with: "Silk Factory Newburgh NY" (Y)? [default param]
-  # > Tag users with: "2026" (Y)?
-  # > Tag users with: "2026-02-28" (Y)? 2026-02-027 [yesterday's date]
-  # > Tag users with: "Back in Black" (Y)? [Page Name up-to first , or -]
-  
-  import_data(input_file)
+  import_data(args.in_file)
   
   if ticket_data:
+    output_file = None
+    if args.out_file:
+      output_file = args.out_file
+
     export_unique_emails(output_file)
     print_ticket_summary()
   else:
