@@ -1,21 +1,37 @@
-import csv
+import csv, re, argparse
+from datetime import datetime
 
 # Global dictionary to store ticket data
 ticket_data = {}
+VENUE_CITY_STATE = "Silk Factory Newburgh NY" # XXX
+YEAR_OF_SHOW = DATE_OF_SHOW = ARTIST_NAME = PAGE_NAME = None
 
 def import_data(file_path):
-  """
-  Imports CSV data into the global ticket_data dictionary keyed by Ticket ID.
-  """
   global ticket_data
+  global VENUE_CITY_STATE, YEAR_OF_SHOW, DATE_OF_SHOW, ARTIST_NAME, PAGE_NAME
+
   try:
     with open(file_path, mode='r', encoding='utf-8-sig') as csvfile:
       reader = csv.DictReader(csvfile)
       for row in reader:
-        # Use "Ticket ID" as the dictionary key
+        # Ticket ID is the dictionary key
         ticket_id = row.get("Ticket ID")
         if ticket_id:
           ticket_data[ticket_id] = row
+
+          # extract tags to send to mailchimp
+          if not PAGE_NAME:
+            PAGE_NAME = row.get("Page Name")
+            if PAGE_NAME and not ARTIST_NAME:
+              parts = re.split(r'[-|,]', PAGE_NAME, maxsplit=1)
+              ARTIST_NAME = parts[0].strip()
+          if not DATE_OF_SHOW:
+            scan_date = row.get("First Scan Date")
+            if scan_date:
+              show_date = datetime.strptime(scan_date, "%Y-%m-%d %I:%M %p")
+              YEAR_OF_SHOW = show_date.strftime("%Y")        # "2025"
+              DATE_OF_SHOW = show_date.strftime("%Y-%m-%d")  # "2025-01-04"
+
   except FileNotFoundError:
     print(f"Error: The file '{file_path}' was not found.")
   except Exception as e:
@@ -33,8 +49,7 @@ def export_unique_emails(output_path):
     "Billing Phone Number": "Phone Number",
     "Billing Address (Postal Code)": "Zip Code"
   }
-  # TODO make this dynamic ... "Concert Attendee", VENUE_CITY_STATE, YEAR_OF_SHOW, DATE_OF_SHOW, ARTIST_NAME
-  tags = "Concert Attendee, Silk Factory Newburgh NY, 2026, 2026-02-27, Back in Black"
+  tags = ', '.join( ["Concert Attendee", VENUE_CITY_STATE, YEAR_OF_SHOW, DATE_OF_SHOW, ARTIST_NAME] )
 
   for ticket in ticket_data.values():
     email = ticket.get("Billing Email Address")
@@ -70,6 +85,8 @@ def print_ticket_summary():
     for ticket in ticket_data.values():
       if ticket['Originating Source'] != origin:
         continue
+      if ticket['Status'] != 'completed':
+        continue
 
       price_raw = ticket.get("Ticket Price ($ Amount)", "0")
       
@@ -98,7 +115,8 @@ def print_ticket_summary():
       total_amount += subtotal
 
     print("-" * 60)
-    print(f"{'SUBTOTAL':<34}| {total_count:<10} | ${total_amount:,.2f}")
+    print(f"{'     '+origin+' subtotal:':<34}| {total_count:<10} | ${total_amount:,.2f}")
+    print()
 
     grand_count += total_count
     grand_amount += total_amount
