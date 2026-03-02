@@ -1,0 +1,132 @@
+Proscenium
+Festival, Open-Air, Proscenium
+Black Box, Concert Hall
+Concert Hall
+Black Box, Proscenium
+Festival
+Black Box, Chamber, Concert Hall, Open-Air, Proscenium
+Chamber, Festival, Proscenium
+Black Box, Cabaret, Concert Hall
+Arena, Concert Hall, Proscenium
+Cabaret, Concert Hall, Proscenium
+Cabaret, Concert Hall, Open-Air, Proscenium
+Black Box, Cabaret, Chamber, Concert Hall, Festival, Proscenium
+Black Box, Cabaret, Concert Hall, Proscenium
+Concert Hall, Open-Air
+Open-Air, Proscenium
+Black Box, Cabaret, Proscenium
+Chamber, Concert Hall
+Concert Hall, In-the-Round
+Cabaret, In-the-Round, Proscenium
+Arena
+Arena, Black Box, Festival, Open-Air, Proscenium
+Black Box, Chamber, Concert Hall, In-the-Round
+Concert Hall, Festival, Proscenium
+Cabaret
+Chamber, Concert Hall, Proscenium
+Cabaret, Proscenium
+Black Box, Cabaret, Concert Hall, Festival
+Arena, Black Box, Chamber, Concert Hall, Open-Air, Proscenium
+Festival, Open-Air
+Black Box, Concert Hall, Proscenium
+Cabaret, Concert Hall
+In-the-Round, Proscenium
+Concert Hall, Proscenium
+Black Box, Concert Hall, Festival, Open-Air
+Chamber
+Arena, Concert Hall
+Open-Air
+Chamber, Proscenium
+Cabaret, Concert Hall, Festival, Open-Air
+Black Box, Cabaret, Chamber, Concert Hall, In-the-Round, Open-Air, Proscenium
+Cabaret, Chamber, Concert Hall, Open-Air
+Arena, Black Box, Concert Hall, Proscenium
+Black Box, Cabaret, Festival, Proscenium
+Black Box, Cabaret, Concert Hall, Festival, Open-Air, Proscenium
+Cabaret, Concert Hall, Festival
+Black Box, Chamber, Concert Hall, Festival
+Black Box, Cabaret, Concert Hall, Festival, Proscenium
+Concert Hall, Festival, Open-Air
+Arena, Open-Air, Proscenium
+Concert Hall, Festival
+Black Box, Cabaret, Chamber, Concert Hall
+Black Box, Chamber, Proscenium
+Black Box, Cabaret, Chamber, Concert Hall, Proscenium
+Chamber, Festival, Open-Air
+Arena, Black Box, Cabaret, Concert Hall, Festival, Open-Air, Proscenium
+Black Box
+Black Box, Cabaret, Chamber, Festival, Open-Air, Proscenium
+Arena, Chamber, Concert Hall, Festival
+Chamber, Concert Hall, Open-Air, Proscenium
+Black Box, Festival, In-the-Round, Open-Air, Proscenium
+Cabaret, Chamber, Concert Hall, Proscenium
+Black Box, Cabaret, Chamber, Proscenium
+Chamber, Concert Hall, In-the-Round, Proscenium
+Black Box, Open-Air
+Festival, Proscenium
+Arena, Cabaret, Concert Hall, Festival, In-the-Round, Open-Air, Proscenium
+Black Box, Cabaret, Chamber, Concert Hall, In-the-Round
+Black Box, Open-Air, Proscenium
+Black Box, Chamber, Concert Hall
+Black Box, Cabaret, Festival, Open-Air, Proscenium
+Black Box, Cabaret, Concert Hall, In-the-Round, Open-Air, Proscenium
+Black Box, Concert Hall, Open-Air
+Concert Hall, In-the-Round, Open-Air
+Arena, Concert Hall, Festival, Proscenium
+Arena, Proscenium
+Black Box, Festival, Proscenium
+Cabaret, Chamber, Concert Hall, Open-Air, Proscenium
+Arena, Chamber, Proscenium
+Arena, Festival, Open-Air
+Black Box, Cabaret, Chamber, Concert Hall, Festival, Open-Air, Proscenium
+Black Box, In-the-Round
+Black Box, Chamber, Concert Hall, Festival, Proscenium
+Black Box, Cabaret, Chamber, Concert Hall, Festival, Open-Air
+Arena, Festival, Proscenium
+Cabaret, Chamber, Concert Hall
+Black Box, Chamber
+Black Box, Cabaret
+Black Box, Chamber, Festival, Open-Air
+Black Box, In-the-Round, Open-Air, Proscenium
+Black Box, Concert Hall, Festival, In-the-Round, Proscenium
+Cabaret, Open-Air, Proscenium
+Black Box, Concert Hall, Festival, In-the-Round, Open-Air
+Black Box, Chamber, Concert Hall, Proscenium
+Arena, Black Box, Cabaret, Festival, Open-Air
+Black Box, Concert Hall, Festival, Proscenium
+Black Box, Cabaret, Concert Hall, Festival, Open-Air
+Arena, Cabaret, Concert Hall, Open-Air, Proscenium
+Concert Hall, Festival, In-the-Round, Open-Air
+Arena, Chamber, Concert Hall, Festival, In-the-Round, Open-Air, Proscenium
+Arena, Cabaret, Concert Hall
+Black Box, Cabaret, Concert Hall, Open-Air
+Concert Hall, Festival, Open-Air, Proscenium
+Arena, Concert Hall, Festival, Open-Air
+Chamber, Open-Air
+Arena, Cabaret, Concert Hall, Festival, Open-Air, Proscenium
+Black Box, Chamber, Concert Hall, Festival, In-the-Round, Open-Air, Proscenium
+Cabaret, Concert Hall, Festival, Open-Air, Proscenium
+Black Box, Concert Hall, Festival, Open-Air, Proscenium
+Arena, Black Box, Proscenium
+Arena, Black Box, Cabaret, Chamber, Concert Hall
+Cabaret, Chamber, Concert Hall, Festival, Open-Air, Proscenium
+Black Box, Cabaret, Open-Air, Proscenium
+Arena, Festival, Open-Air, Proscenium
+Arena, Cabaret, Festival, Proscenium
+Black Box, Cabaret, Chamber, Concert Hall, Open-Air
+Chamber, Concert Hall, Festival
+Black Box, Festival, Open-Air
+Black Box, Chamber, Open-Air, Proscenium
+Black Box, Cabaret, Chamber, Concert Hall, Festival, In-the-Round, Open-Air, Proscenium
+Cabaret, In-the-Round
+Black Box, Cabaret, Chamber, Open-Air
+Black Box, Cabaret, Chamber
+Black Box, Cabaret, Concert Hall, In-the-Round, Proscenium
+Chamber, Concert Hall, In-the-Round
+Black Box, Festival
+Arena, Black Box, Cabaret, Concert Hall, In-the-Round, Proscenium
+Cabaret, Chamber, Concert Hall, Festival
+Black Box, Concert Hall, Open-Air, Proscenium
+Chamber, Concert Hall, Open-Air
+Arena, Concert Hall, Open-Air, Proscenium
+Arena, Black Box, Cabaret, Proscenium
