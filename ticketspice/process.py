@@ -1,5 +1,6 @@
 import csv, re, argparse
 from datetime import datetime
+from pathlib import Path
 
 # Global dictionary to store ticket data
 ticket_data = {}
@@ -39,9 +40,10 @@ def import_data(file_path):
   else:
     print( "+ imported:", file_path )
 
-def export_unique_emails(output_path):
+def export_unique_emails(output_file):
   # Use a dictionary keyed by email to ensure uniqueness
   unique_customers = {}
+  customer_count = 0
   
   # Column mapping: "Source Column": "Target Column"
   mapping = {
@@ -52,47 +54,29 @@ def export_unique_emails(output_path):
     "Billing Address (Postal Code)": "Zip Code"
   }
 
-  bad_tags = False
-  if not VENUE_CITY_STATE:
-    print( "+ missing: VENUE_CITY_STATE" )
-    bad_tags = True
-  if not ARTIST_NAME:
-    print( "+ missing: ARTIST_NAME" )
-    bad_tags = True
-  if not SHOW_DATE:
-    print( "+ missing: SHOW_DATE" )
-    bad_tags = True
-  if not SHOW_YEAR:
-    print( "+ missing: SHOW_YEAR" )
-    bad_tags = True
-
-  if bad_tags:
-    print( "! email export failure - check input file, or use args to supliment data" )
-    return
 
   tags = ', '.join( ["Concert Attendee", VENUE_CITY_STATE, SHOW_YEAR, SHOW_DATE, ARTIST_NAME] )
-
-  if not output_path:
-    output_path = ARTIST_NAME.replace(" ","") + "_" + VENUE_CITY_STATE.replace(" ","") + "_" + SHOW_DATE + "_Contacts.csv"
 
   for ticket in ticket_data.values():
     email = ticket.get("Billing Email Address")
     if email and email not in unique_customers:
       unique_customers[email] = {mapping[k]: ticket.get(k, "") for k in mapping}
       unique_customers[email]['Tags'] = tags
+      customer_count += 1
 
   if not unique_customers:
     return
 
   fieldnames = list(mapping.values())
   fieldnames.append( "Tags" )
-  with open(output_path, mode='w', encoding='utf-8', newline='') as f:
+  with open(output_file, mode='w', encoding='utf-8', newline='') as f:
     writer = csv.DictWriter(f, fieldnames=fieldnames)
     writer.writeheader()
     for customer in unique_customers.values():
       writer.writerow(customer)
 
-  print( "+ exported:", output_path )
+  print( "+ exported:", output_file )
+  print( "   (" + str(customer_count) + " unique contacts)" )
 
 def print_ticket_summary():
   """
@@ -154,7 +138,7 @@ def print_ticket_summary():
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
-  parser.add_argument("in_file", help="The exported ticketspice csv file to be imported.")
+  parser.add_argument("input_file", help="The exported ticketspice csv file to be imported.")
   parser.add_argument("--out_file", help="The filename of the mailchimp contacts csv to be written.")
   parser.add_argument("--artist", help='The artist name (a TAG: "Back in Black")')
   parser.add_argument("--venue", help='The venue name, city, and state (a TAG: "Silk Factory Newburgh NY")')
@@ -170,15 +154,38 @@ if __name__ == "__main__":
   if args.venue:
     VENUE_CITY_STATE = args.venue
 
-  import_data(args.in_file)
+  import_data(args.input_file)
   
   if ticket_data:
-    output_file = None
-    if args.out_file:
-      output_file = args.out_file
+    bad_tags = False
+    if not VENUE_CITY_STATE:
+      print( "+ missing: VENUE_CITY_STATE" )
+      bad_tags = True
+    if not ARTIST_NAME:
+      print( "+ missing: ARTIST_NAME" )
+      bad_tags = True
+    if not SHOW_DATE:
+      print( "+ missing: SHOW_DATE" )
+      bad_tags = True
+    if not SHOW_YEAR:
+      print( "+ missing: SHOW_YEAR" )
+      bad_tags = True
 
-    export_unique_emails(output_file)
+    if bad_tags:
+      print( "!! export failure: check input file, or use args to supliment data" )
+
+    else:
+      output_file = None
+      if args.out_file:
+        output_file = args.out_file
+      else:
+        p = Path(args.input_file)
+        output_file = str(p.parent)+'/'+ARTIST_NAME.replace(" ","")+'_'+VENUE_CITY_STATE.replace(" ","")+'_'+SHOW_DATE+"_Contacts.csv"
+
+      export_unique_emails(output_file)
+
     print_ticket_summary()
+
   else:
     print("No data imported. Please check the CSV file and column names.")
   print()
