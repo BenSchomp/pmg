@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import csv, re, argparse
 from datetime import datetime
 from pathlib import Path
