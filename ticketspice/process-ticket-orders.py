@@ -160,20 +160,20 @@ if __name__ == "__main__":
   if ticket_data:
     bad_tags = False
     if not VENUE_CITY_STATE:
-      print( "+ missing: VENUE_CITY_STATE" )
+      print( "! missing: VENUE_CITY_STATE (use: --venue)" )
       bad_tags = True
     if not ARTIST_NAME:
-      print( "+ missing: ARTIST_NAME" )
+      print( "! missing: ARTIST_NAME (use: --artist)" )
       bad_tags = True
     if not SHOW_DATE:
-      print( "+ missing: SHOW_DATE" )
+      print( "! missing: SHOW_DATE (use: --date)" )
       bad_tags = True
     if not SHOW_YEAR:
-      print( "+ missing: SHOW_YEAR" )
+      print( "! missing: SHOW_YEAR" )
       bad_tags = True
 
     if bad_tags:
-      print( "!! export failure: check input file, or use args to supliment data" )
+      print( "\n!! export failure: check input file, or use args to supliment data !!" )
 
     else:
       output_file = None
