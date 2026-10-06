@@ -5,7 +5,7 @@ from pathlib import Path
 
 # Global dictionary to store ticket data
 ticket_data = {}
-VENUE_CITY_STATE = "Silk Factory Newburgh NY" # XXX
+VENUE_CITY_STATE = None # "Silk Factory Newburgh NY" # XXX
 SHOW_YEAR = SHOW_DATE = ARTIST_NAME = PAGE_NAME = None
 
 def import_data(file_path):
